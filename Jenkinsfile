@@ -8,11 +8,12 @@ pipeline {
     }
 
     stages {
-        stage('Preparation') {
-            steps {
-                git 'https://github.com/shrookmuhamed/Jenkins_project.git'
-            }
-        }
+      stage('Preparation') {
+    steps {
+        git branch: 'main',
+            url: 'https://github.com/shrookmuhamed/Jenkins_project.git'
+    }
+}
         stage('Build') {
             steps {
                 withCredentials([usernamePassword(credentialsId: 'docker', passwordVariable: 'PASS', usernameVariable: 'USER')]) {
