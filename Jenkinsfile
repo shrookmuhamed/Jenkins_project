@@ -29,10 +29,10 @@ pipeline {
             steps {
                 withCredentials([
                     usernamePassword(credentialsId: 'docker', passwordVariable: 'PASS', usernameVariable: 'USER'),
-                    string(credentialsId: 'rds_hostname', variable: 'RDS_HOSTNAME'),
-                    string(credentialsId: 'rds_username', variable: 'RDS_USERNAME'),
-                    string(credentialsId: 'rds_password', variable: 'RDS_PASSWORD'),
-                    string(credentialsId: 'redis_hostname', variable: 'REDIS_HOSTNAME')
+                    // string(credentialsId: 'rds_hostname', variable: 'RDS_HOSTNAME'),
+                    // string(credentialsId: 'rds_username', variable: 'RDS_USERNAME'),
+                    // string(credentialsId: 'rds_password', variable: 'RDS_PASSWORD'),
+                    // string(credentialsId: 'redis_hostname', variable: 'REDIS_HOSTNAME')
                 ]) {
                     sh  """
                         docker login -u ${USER} -p ${PASS}
