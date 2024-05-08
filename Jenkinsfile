@@ -5,7 +5,6 @@ pipeline {
         // Assuming these are not sensitive and static
         REDIS_PORT = '6379'
         RDS_PORT = '3306'
-        RDS_HOSTNAME = 'mydb'
     }
 
     stages {
@@ -35,32 +34,20 @@ pipeline {
                     string(credentialsId: 'rds_password', variable: 'RDS_PASSWORD'),
                     string(credentialsId: 'redis_hostname', variable: 'REDIS_HOSTNAME')
                 ]) {
-                    echo "Debugging Credentials:"
-    echo "RDS_HOSTNAME: ${env.RDS_HOSTNAME}"
-    echo "RDS_USERNAME: ${env.RDS_USERNAME}"
                     sh  """
                         docker login -u ${USER} -p ${PASS}
                         docker run -d -p 3001:3000 \
-                            -e RDS_HOSTNAME='${RDS_HOSTNAME}' \
-                            -e RDS_USERNAME='${RDS_USERNAME}' \
-                            -e RDS_PASSWORD='${RDS_PASSWORD}' \
+                            -e RDS_HOSTNAME= 'mydb' \
+                            -e RDS_USERNAME='master' \
+                            -e RDS_PASSWORD='yK_U6F36T6BwtIDF' \
                             -e RDS_PORT='${RDS_PORT}' \
-                            -e REDIS_HOSTNAME='${REDIS_HOSTNAME}' \
+                            -e REDIS_HOSTNAME='cluster-redis' \
                             -e REDIS_PORT='${REDIS_PORT}' \
                             ${USER}/nodeapp:latest
                         """
                 }
             }
         }
-        stage('Debug Environment Variables') {
-            steps {
-                script {
-                    echo "RDS_HOSTNAME: ${env.RDS_HOSTNAME}"
-                    echo "RDS_USERNAME: ${env.RDS_USERNAME}"
-                    echo "REDIS_HOSTNAME: ${env.REDIS_HOSTNAME}"
-                    // Add additional variables as necessary
-                }
-            }
-        }
+        
     }
 }
