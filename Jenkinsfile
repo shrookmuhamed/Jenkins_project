@@ -37,7 +37,7 @@ pipeline {
                     sh  """
                         docker login -u ${USER} -p ${PASS}
                         docker run -d -p 3001:3000 \
-                            -e RDS_HOSTNAME= 'mydb' \
+                            -e RDS_HOSTNAME='mydb' \
                             -e RDS_USERNAME='master' \
                             -e RDS_PASSWORD='yK_U6F36T6BwtIDF' \
                             -e RDS_PORT='${RDS_PORT}' \
