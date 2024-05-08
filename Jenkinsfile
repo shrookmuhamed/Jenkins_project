@@ -29,21 +29,22 @@ pipeline {
             steps {
                 withCredentials([
                     usernamePassword(credentialsId: 'docker', passwordVariable: 'PASS', usernameVariable: 'USER'),
-                    // string(credentialsId: 'rds_hostname', variable: 'RDS_HOSTNAME'),
-                    // string(credentialsId: 'rds_username', variable: 'RDS_USERNAME'),
-                    // string(credentialsId: 'rds_password', variable: 'RDS_PASSWORD'),
-                    // string(credentialsId: 'redis_hostname', variable: 'REDIS_HOSTNAME')
+                    string(credentialsId: 'rds_hostname', variable: 'RDS_HOSTNAME'),
+                    string(credentialsId: 'rds_username', variable: 'RDS_USERNAME'),
+                    string(credentialsId: 'rds_password', variable: 'RDS_PASSWORD'),
+                    string(credentialsId: 'redis_hostname', variable: 'REDIS_HOSTNAME')
                 ]) {
                     sh  """
-                        docker login -u ${USER} -p ${PASS}
+                         docker login -u ${USER} -p ${PASS}
                         docker run -d -p 3001:3000 \
-                            -e RDS_HOSTNAME='mydb.cp8kuco269eh.us-east-1.rds.amazonaws.com' \
-                            -e RDS_USERNAME='master' \
-                            -e RDS_PASSWORD='yK_U6F36T6BwtIDF' \
+                            -e RDS_HOSTNAME='${RDS_HOSTNAME}' \
+                            -e RDS_USERNAME='${RDS_USERNAME}' \
+                            -e RDS_PASSWORD='${RDS_PASSWORD}' \
                             -e RDS_PORT='${RDS_PORT}' \
-                            -e REDIS_HOSTNAME='cluster-redis' \
+                            -e REDIS_HOSTNAME='${REDIS_HOSTNAME}' \
                             -e REDIS_PORT='${REDIS_PORT}' \
                             ${USER}/nodeapp:latest
+
                         """
                 }
             }
