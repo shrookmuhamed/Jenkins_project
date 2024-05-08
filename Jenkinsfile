@@ -5,6 +5,7 @@ pipeline {
         // Assuming these are not sensitive and static
         REDIS_PORT = '6379'
         RDS_PORT = '3306'
+        RDS_HOSTNAME = 'mydb'
     }
 
     stages {
