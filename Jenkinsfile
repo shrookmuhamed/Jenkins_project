@@ -1,5 +1,5 @@
 pipeline {
-    agent { label 'aws_pub' }
+    agent { label 'aws_priv' }
 
     environment {
         // Assuming these are not sensitive and static
