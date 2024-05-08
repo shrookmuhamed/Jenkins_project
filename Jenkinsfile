@@ -24,7 +24,6 @@ pipeline {
                         """
                 }
             }
-        }
         stage('Deploy') {
             steps {
                 withCredentials([
@@ -45,7 +44,19 @@ pipeline {
                             -e REDIS_PORT='${REDIS_PORT}' \
                             ${USER}/nodeapp:latest
                         """
-                }
+                }}
+ stage('Debug Environment Variables') {
+    steps {
+        script {
+            echo "RDS_HOSTNAME: ${env.RDS_HOSTNAME}"
+            echo "RDS_USERNAME: ${env.RDS_USERNAME}"
+            echo "REDIS_HOSTNAME: ${env.REDIS_HOSTNAME}"
+            // Add additional variables as necessary
+        }
+    }
+}
+        }
+        }
             }
         }
     }
