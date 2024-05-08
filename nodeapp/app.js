@@ -10,9 +10,6 @@ var connection = mysql.createConnection({
   port     : process.env.RDS_PORT
 });
 
-console.log(`Database Host: ${process.env.RDS_HOSTNAME}`);
-console.log(`Redis Host: ${process.env.REDIS_HOSTNAME}`);
-
 app.get("/db", (req, res) => {
 
 connection.connect(function(err) {
