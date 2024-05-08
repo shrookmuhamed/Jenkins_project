@@ -35,6 +35,9 @@ pipeline {
                     string(credentialsId: 'rds_password', variable: 'RDS_PASSWORD'),
                     string(credentialsId: 'redis_hostname', variable: 'REDIS_HOSTNAME')
                 ]) {
+                    echo "Debugging Credentials:"
+    echo "RDS_HOSTNAME: ${env.RDS_HOSTNAME}"
+    echo "RDS_USERNAME: ${env.RDS_USERNAME}"
                     sh  """
                         docker login -u ${USER} -p ${PASS}
                         docker run -d -p 3001:3000 \
