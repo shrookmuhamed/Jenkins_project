@@ -1,0 +1,97 @@
+---
+- name: Configure Ubuntu server as Jenkins slave
+  hosts: all
+  become: yes
+  vars:
+    ansible_python_interpreter: /usr/bin/python3
+  tasks:
+
+    - name: Add Jenkins user
+      user:
+        name: jenkins
+        comment: "Jenkins User"
+
+    - name: Create a directory for Jenkins
+      file:
+        path: "/home/jenkins/jenkins"
+        state: directory
+        owner: jenkins
+        group: jenkins
+        mode: '0755'
+    - name: Ensure .ssh directory exists for Jenkins user
+      file:
+        path: "/home/jenkins/.ssh"
+        state: directory
+        owner: jenkins
+        group: jenkins
+        mode: '0700'
+    - name: Copy public key file to Jenkins user .ssh directory
+      copy:
+        src: "/home/ubuntu/jenkins/pubkey.pem"
+        dest: "/home/jenkins/.ssh/authorized_keys"
+        owner: jenkins
+        group: jenkins
+        mode: '0600'
+
+    - name: Install necessary packages
+      apt:
+        update_cache: yes
+        name:
+          - openjdk-11-jdk
+          - git
+          - redis-tools
+          - docker.io
+        state: present
+
+    - name: Add Jenkins user to the Docker group
+      user:
+        name: jenkins
+        groups: docker
+        append: yes
+
+    - name: Ensure the SSH service is started
+      service:
+        name: ssh
+        state: started
+        enabled: yes
+
+    - name: Ensure Docker service is started
+      service:
+        name: docker
+        state: started
+        enabled: yes
+
+
+
+    - name: Install unzip utility
+      apt:
+        name: unzip
+        state: present
+
+    - name: Download Terraform
+      get_url:
+        url: "https://releases.hashicorp.com/terraform/1.0.0/terraform_1.0.0_linux_amd64.zip"
+        dest: "/tmp/terraform_1.0.0_linux_amd64.zip"
+        validate_certs: yes
+
+    - name: Unarchive Terraform binary
+      command:
+        cmd: "unzip -o -j /tmp/terraform_1.0.0_linux_amd64.zip -d /usr/local/bin"
+
+    - name: Ensure Terraform binary is executable
+      file:
+        path: "/usr/local/bin/terraform"
+        mode: '0755'
+        state: file
+
+    - name: Install MySQL server
+      apt:
+        name: mysql-server
+        state: present
+
+    - name: Start MySQL service
+      service:
+        name: mysql
+        state: started
+        enabled: yes
+
